@@ -132,10 +132,16 @@ resource "aws_iam_openid_connect_provider" "eks" {
   }
 }
 
+# Generate SSH key pair for EKS Nodes
+resource "tls_private_key" "eks_nodes" {
+  algorithm = "RSA"
+  rsa_bits  = 4096
+}
+
 # Key Pair for EKS Nodes SSH Access
 resource "aws_key_pair" "eks_nodes" {
   key_name   = "${var.project_name}-eks-nodes-key"
-  public_key = file("~/.ssh/id_rsa.pub")
+  public_key = tls_private_key.eks_nodes.public_key_openssh
 
   tags = {
     Name = "${var.project_name}-eks-nodes-key"

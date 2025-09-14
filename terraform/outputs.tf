@@ -155,6 +155,12 @@ output "enable_public_nodes" {
   value       = var.enable_public_nodes
 }
 
+# SSH Key Outputs
+output "ssh_key_name" {
+  description = "Nome da chave SSH para acesso aos nodes EKS"
+  value       = aws_key_pair.eks_nodes.key_name
+}
+
 # URL da aplicação (será preenchido após deploy do LoadBalancer)
 output "application_url" {
   description = "URL da aplicação (LoadBalancer)"
