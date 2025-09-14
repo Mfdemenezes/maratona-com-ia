@@ -132,6 +132,25 @@ resource "aws_iam_openid_connect_provider" "eks" {
   }
 }
 
+# Access entry for cli_user
+resource "aws_eks_access_entry" "cli_user" {
+  cluster_name  = aws_eks_cluster.main.name
+  principal_arn = "arn:aws:iam::405894841048:user/cli_user"
+  type          = "STANDARD"
+}
+
+resource "aws_eks_access_policy_association" "cli_user_admin" {
+  cluster_name  = aws_eks_cluster.main.name
+  policy_arn    = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
+  principal_arn = "arn:aws:iam::405894841048:user/cli_user"
+
+  access_scope {
+    type = "cluster"
+  }
+
+  depends_on = [aws_eks_access_entry.cli_user]
+}
+
 # Generate SSH key pair for EKS Nodes
 resource "tls_private_key" "eks_nodes" {
   algorithm = "RSA"
