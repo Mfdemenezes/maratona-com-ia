@@ -27,9 +27,6 @@ resource "aws_eks_cluster" "main" {
   role_arn = aws_iam_role.eks_cluster.arn
   version  = var.cluster_version
 
-  # Enable API authentication mode for access entries
-  authentication_mode = "API_AND_CONFIG_MAP"
-
   vpc_config {
     subnet_ids              = concat(aws_subnet.public[*].id, aws_subnet.private[*].id)
     endpoint_private_access = true
@@ -135,23 +132,24 @@ resource "aws_iam_openid_connect_provider" "eks" {
   }
 }
 
-# Access entry for cli_user
-resource "aws_eks_access_entry" "cli_user" {
-  cluster_name  = aws_eks_cluster.main.name
-  principal_arn = "arn:aws:iam::405894841048:user/cli_user"
-  type          = "STANDARD"
-}
-
-resource "aws_eks_access_policy_association" "cli_user_admin" {
-  cluster_name  = aws_eks_cluster.main.name
-  policy_arn    = "arn:aws:eks::aws:cluster-access-policy/AmazonEKSClusterAdminPolicy"
-  principal_arn = "arn:aws:iam::405894841048:user/cli_user"
-
-  access_scope {
-    type = "cluster"
+# AWS Auth ConfigMap to allow cli_user access
+resource "kubernetes_config_map_v1_data" "aws_auth" {
+  metadata {
+    name      = "aws-auth"
+    namespace = "kube-system"
   }
 
-  depends_on = [aws_eks_access_entry.cli_user]
+  data = {
+    mapUsers = yamlencode([
+      {
+        userarn  = "arn:aws:iam::405894841048:user/cli_user"
+        username = "cli_user"
+        groups   = ["system:masters"]
+      }
+    ])
+  }
+
+  depends_on = [aws_eks_node_group.main]
 }
 
 # Generate SSH key pair for EKS Nodes
