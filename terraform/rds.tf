@@ -33,9 +33,11 @@ resource "aws_security_group" "rds" {
   }
 }
 
-# RDS PostgreSQL Instance
+# RDS PostgreSQL Instance(s)
 resource "aws_db_instance" "main" {
-  identifier = "${var.project_name}-db"
+  count = var.db_instance_count
+
+  identifier = var.db_instance_count > 1 ? "${var.project_name}-db-${count.index + 1}" : "${var.project_name}-db"
 
   engine         = "postgres"
   engine_version = "15.7"
@@ -46,7 +48,7 @@ resource "aws_db_instance" "main" {
   storage_type          = "gp3"
   storage_encrypted     = true
 
-  db_name  = var.db_name
+  db_name  = var.db_instance_count > 1 ? "${var.db_name}${count.index + 1}" : var.db_name
   username = var.db_username
   password = var.db_password
 
@@ -54,8 +56,8 @@ resource "aws_db_instance" "main" {
   db_subnet_group_name   = aws_db_subnet_group.main.name
 
   backup_retention_period = var.db_backup_retention_days
-  backup_window           = "03:00-04:00"
-  maintenance_window      = "sun:04:00-sun:05:00"
+  backup_window           = format("%02d:00-%02d:00", (3 + count.index) % 24, (4 + count.index) % 24)
+  maintenance_window      = format("sun:%02d:00-sun:%02d:00", (4 + count.index) % 24, (5 + count.index) % 24)
 
   skip_final_snapshot = true
   deletion_protection = false
@@ -64,7 +66,7 @@ resource "aws_db_instance" "main" {
   performance_insights_enabled = true
 
   tags = {
-    Name = "${var.project_name}-postgres-db"
+    Name = var.db_instance_count > 1 ? "${var.project_name}-postgres-db-${count.index + 1}" : "${var.project_name}-postgres-db"
   }
 }
 

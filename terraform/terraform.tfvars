@@ -21,6 +21,7 @@ db_instance_class        = "db.t3.micro" # ou db.t3.small, db.r5.large, etc.
 db_allocated_storage     = 20
 db_max_allocated_storage = 100
 db_backup_retention_days = 7
+db_instance_count        = 2
 
 # Application Configuration
 app_image          = "mfdemenezes/maratona-com-ia:latest"

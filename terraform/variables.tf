@@ -112,6 +112,16 @@ variable "db_backup_retention_days" {
   default     = 7
 }
 
+variable "db_instance_count" {
+  description = "Quantidade de instâncias de banco de dados"
+  type        = number
+  default     = 1
+  validation {
+    condition     = var.db_instance_count >= 1 && var.db_instance_count <= 10
+    error_message = "A quantidade de instâncias deve estar entre 1 e 10."
+  }
+}
+
 # Application Configuration
 variable "app_image" {
   description = "Imagem Docker da aplicação"

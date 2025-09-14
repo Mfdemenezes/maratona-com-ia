@@ -72,15 +72,20 @@ output "node_security_group_id" {
 }
 
 # Database Outputs
-output "db_instance_endpoint" {
-  description = "RDS instance endpoint"
-  value       = aws_db_instance.main.endpoint
+output "db_instance_endpoints" {
+  description = "Lista de endpoints das instâncias RDS"
+  value       = aws_db_instance.main[*].endpoint
   sensitive   = true
 }
 
-output "db_instance_name" {
-  description = "RDS instance name"
-  value       = aws_db_instance.main.db_name
+output "db_instance_names" {
+  description = "Lista de nomes das instâncias RDS"
+  value       = aws_db_instance.main[*].db_name
+}
+
+output "db_instance_count" {
+  description = "Quantidade de instâncias de banco de dados"
+  value       = var.db_instance_count
 }
 
 output "db_instance_class" {
