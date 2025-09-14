@@ -219,3 +219,8 @@ __marimo__/
 .postgres-data
 
 kubeconfig
+
+# Kubernetes secrets (nunca commitar)
+k8s/*-secret.yaml
+k8s/database-secret.yaml
+*kubeconfig*
