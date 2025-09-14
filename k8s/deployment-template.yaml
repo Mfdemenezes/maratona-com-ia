@@ -1,23 +1,25 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: encontros-tech
+  name: ${PROJECT_NAME}
   labels:
-    app: encontros-tech
+    app: ${PROJECT_NAME}
+    environment: ${ENVIRONMENT}
 spec:
-  replicas: 2
+  replicas: ${APP_REPLICAS}
   selector:
     matchLabels:
-      app: encontros-tech
+      app: ${PROJECT_NAME}
   template:
     metadata:
       labels:
-        app: encontros-tech
+        app: ${PROJECT_NAME}
+        environment: ${ENVIRONMENT}
     spec:
-      serviceAccountName: encontros-tech-sa
+      serviceAccountName: ${PROJECT_NAME}-sa
       containers:
-      - name: encontros-tech
-        image: mfdemenezes/maratona-com-ia:latest
+      - name: ${PROJECT_NAME}
+        image: ${APP_IMAGE}
         ports:
         - containerPort: 8000
         env:
@@ -26,13 +28,15 @@ spec:
             secretKeyRef:
               name: database-secret
               key: database-url
+        - name: ENVIRONMENT
+          value: ${ENVIRONMENT}
         resources:
           requests:
-            memory: "128Mi"
-            cpu: "100m"
+            memory: ${APP_MEMORY_REQUEST}
+            cpu: ${APP_CPU_REQUEST}
           limits:
-            memory: "256Mi"
-            cpu: "200m"
+            memory: ${APP_MEMORY_LIMIT}
+            cpu: ${APP_CPU_LIMIT}
         readinessProbe:
           httpGet:
             path: /
@@ -49,9 +53,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: encontros-tech
+  name: ${PROJECT_NAME}
   labels:
-    app: encontros-tech
+    app: ${PROJECT_NAME}
+    environment: ${ENVIRONMENT}
 spec:
   type: LoadBalancer
   ports:
@@ -59,4 +64,4 @@ spec:
     targetPort: 8000
     protocol: TCP
   selector:
-    app: encontros-tech
+    app: ${PROJECT_NAME}

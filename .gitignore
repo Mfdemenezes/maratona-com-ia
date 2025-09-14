@@ -224,3 +224,15 @@ kubeconfig
 k8s/*-secret.yaml
 k8s/database-secret.yaml
 *kubeconfig*
+
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+terraform.tfplan
+.terraform.d/
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json

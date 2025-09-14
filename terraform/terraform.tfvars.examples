@@ -1,0 +1,126 @@
+# =====================================
+# EXEMPLOS DE CONFIGURAÇÃO - terraform.tfvars
+# =====================================
+# Copie e modifique conforme sua necessidade
+
+# =====================================
+# CONFIGURAÇÃO BÁSICA (Padrão atual)
+# =====================================
+project_name = "encontros-tech"
+aws_region   = "us-east-1"
+environment  = "prod"
+cluster_version = "1.28"
+node_group_instance_types = ["t3.medium"]
+node_group_capacity_type = "ON_DEMAND"
+node_group_min_size = 1
+node_group_max_size = 4
+node_group_desired_size = 2
+enable_public_nodes = true
+db_name = "encontrostechdb"
+db_username = "mfdemenezes"
+db_password = "Mfm38111"
+db_instance_class = "db.t3.micro"
+app_image = "mfdemenezes/maratona-com-ia:latest"
+app_replicas = 2
+
+# =====================================
+# CONFIGURAÇÃO ECONÔMICA (Menor custo)
+# =====================================
+# project_name = "projeto-economico"
+# aws_region = "us-east-1"
+# environment = "dev"
+# cluster_version = "1.28"
+# node_group_instance_types = ["t3.small"]
+# node_group_capacity_type = "SPOT"  # 60-90% mais barato
+# node_group_min_size = 1
+# node_group_max_size = 2
+# node_group_desired_size = 1
+# enable_public_nodes = true
+# enable_nat_gateway = false  # Remove NAT Gateway (economiza ~$45/mês)
+# db_instance_class = "db.t3.micro"  # Menor instância RDS
+# db_allocated_storage = 20
+# app_replicas = 1  # Apenas 1 replica
+# app_cpu_request = "50m"
+# app_memory_request = "64Mi"
+
+# =====================================
+# CONFIGURAÇÃO DE PRODUÇÃO (Alta disponibilidade)
+# =====================================
+# project_name = "projeto-producao"
+# aws_region = "us-east-1"
+# environment = "prod"
+# cluster_version = "1.28"
+# node_group_instance_types = ["t3.large", "t3.xlarge"]
+# node_group_capacity_type = "ON_DEMAND"
+# node_group_min_size = 2
+# node_group_max_size = 10
+# node_group_desired_size = 4
+# node_group_disk_size = 50
+# enable_public_nodes = false  # Nodes privados para segurança
+# db_instance_class = "db.r5.large"
+# db_allocated_storage = 100
+# db_max_allocated_storage = 1000
+# db_backup_retention_days = 30
+# app_replicas = 5
+# app_cpu_request = "200m"
+# app_memory_request = "512Mi"
+# app_cpu_limit = "500m"
+# app_memory_limit = "1Gi"
+
+# =====================================
+# CONFIGURAÇÃO DE DESENVOLVIMENTO
+# =====================================
+# project_name = "projeto-dev"
+# aws_region = "us-west-2"  # Região diferente
+# environment = "dev"
+# cluster_version = "1.28"
+# node_group_instance_types = ["t3.small"]
+# node_group_capacity_type = "SPOT"
+# node_group_min_size = 1
+# node_group_max_size = 3
+# node_group_desired_size = 1
+# db_instance_class = "db.t3.micro"
+# db_backup_retention_days = 1  # Backup mínimo para dev
+# app_image = "mfdemenezes/maratona-com-ia:dev"
+# app_replicas = 1
+# vpc_cidr = "172.16.0.0/16"  # CIDR diferente
+
+# =====================================
+# CONFIGURAÇÃO MULTI-REGIÃO
+# =====================================
+# project_name = "projeto-multi-regiao"
+# aws_region = "eu-west-1"  # Europa
+# environment = "prod"
+# cluster_version = "1.28"
+# node_group_instance_types = ["t3.medium"]
+# vpc_cidr = "192.168.0.0/16"  # CIDR diferente para evitar conflitos
+
+# =====================================
+# CONFIGURAÇÃO PARA TESTES DE CARGA
+# =====================================
+# project_name = "projeto-load-test"
+# environment = "test"
+# node_group_instance_types = ["c5.large"]  # CPU-optimized para load tests
+# node_group_min_size = 2
+# node_group_max_size = 20
+# node_group_desired_size = 5
+# db_instance_class = "db.r5.xlarge"  # Memory-optimized para DB
+# app_replicas = 10
+# app_cpu_limit = "1000m"
+# app_memory_limit = "2Gi"
+
+# =====================================
+# CONFIGURAÇÃO PERSONALIZADA
+# =====================================
+# Modifique estas variáveis conforme necessário:
+#
+# Tipos de instância disponíveis:
+# - t3.nano, t3.micro, t3.small, t3.medium, t3.large, t3.xlarge, t3.2xlarge
+# - m5.large, m5.xlarge, m5.2xlarge, m5.4xlarge, m5.8xlarge, m5.12xlarge, m5.16xlarge, m5.24xlarge
+# - c5.large, c5.xlarge, c5.2xlarge, c5.4xlarge, c5.9xlarge, c5.12xlarge, c5.18xlarge, c5.24xlarge
+# - r5.large, r5.xlarge, r5.2xlarge, r5.4xlarge, r5.8xlarge, r5.12xlarge, r5.16xlarge, r5.24xlarge
+#
+# Classes RDS disponíveis:
+# - db.t3.micro, db.t3.small, db.t3.medium, db.t3.large, db.t3.xlarge, db.t3.2xlarge
+# - db.r5.large, db.r5.xlarge, db.r5.2xlarge, db.r5.4xlarge, db.r5.8xlarge, db.r5.12xlarge, db.r5.16xlarge, db.r5.24xlarge
+# - db.m5.large, db.m5.xlarge, db.m5.2xlarge, db.m5.4xlarge, db.m5.8xlarge, db.m5.12xlarge, db.m5.16xlarge, db.m5.24xlarge
