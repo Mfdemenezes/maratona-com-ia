@@ -133,6 +133,7 @@ jobs:
         run: |
           kubectl apply -f ../k8s/service-account.yaml
           kubectl apply -f /tmp/deployment.yaml
+          kubectl rollout restart deployment/${{ steps.terraform.outputs.project_name }}
           kubectl rollout status deployment/${{ steps.terraform.outputs.project_name }}
 
       - name: Verify deployment
