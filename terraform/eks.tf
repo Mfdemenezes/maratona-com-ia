@@ -27,6 +27,9 @@ resource "aws_eks_cluster" "main" {
   role_arn = aws_iam_role.eks_cluster.arn
   version  = var.cluster_version
 
+  # Enable API authentication mode for access entries
+  authentication_mode = "API_AND_CONFIG_MAP"
+
   vpc_config {
     subnet_ids              = concat(aws_subnet.public[*].id, aws_subnet.private[*].id)
     endpoint_private_access = true
